@@ -263,6 +263,10 @@ if [ -f "/$DOCKER_DEB" ]; then
 fi
 #TODO:---
 
+# remove default user pirate
+deluser --remove-home pirate
+delgroup pirate
+
 # cleanup APT cache and lists
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
