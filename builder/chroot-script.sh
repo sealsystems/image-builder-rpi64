@@ -265,7 +265,6 @@ fi
 
 # remove default user pirate
 deluser --remove-home pirate
-delgroup pirate
 
 # cleanup APT cache and lists
 apt-get clean
