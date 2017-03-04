@@ -3,11 +3,20 @@ services:
   - docker
 language: bash
 script:
-  - ./travis-build.sh
-after_success:
-  - ls -al builds/$BUILD_NR/*
+  - make shellcheck
+  - VERSION=${TRAVIS_TAG} make sd-image
 branches:
   only:
+    - my
     - master
-  except:
     - /^v\d.*$/
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: ${GITHUB_TOKEN}
+  file:
+    - hypriotos-rpi64-${TRAVIS_TAG}.img.zip
+    - hypriotos-rpi64-${TRAVIS_TAG}.img.zip.sha256
+  on:
+    tags: true
+    repo: sealsystems/image-builder-rpi64
