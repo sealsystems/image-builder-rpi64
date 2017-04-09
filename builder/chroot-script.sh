@@ -225,7 +225,14 @@ echo '{
 }
 ' > /etc/docker/daemon.json
 
-#TODO: Install Docker CE later for Debian Jessie
+# install docker-engine
+DOCKER_DEB=$(mktemp)
+wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
+echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
+dpkg -i "$DOCKER_DEB"
+
+# fix missing apt-get install dependencies
+apt-get -f install -y
 
 echo "Installing rpi-serial-console script"
 wget -q https://raw.githubusercontent.com/lurch/rpi-serial-console/master/rpi-serial-console -O usr/local/bin/rpi-serial-console
