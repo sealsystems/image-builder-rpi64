@@ -224,17 +224,14 @@ echo '{
 }
 ' > /etc/docker/daemon.json
 
-# install Docker Engine directly from GitHub releases
-DOCKER_DEB="docker-engine_${DOCKER_ENGINE_VERSION}-0.debian-jessie_arm64.deb"
-curl -sSL "https://github.com/DieterReuter/docker-armbuilds/releases/download/v${DOCKER_ENGINE_VERSION}/$DOCKER_DEB" \
-  > "/$DOCKER_DEB"
-if [ -f "/$DOCKER_DEB" ]; then
-  dpkg -i "/$DOCKER_DEB" || /bin/true
-  rm -f "/$DOCKER_DEB"
+# install docker-engine
+DOCKER_DEB=$(mktemp)
+wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
+echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
+dpkg -i "$DOCKER_DEB"
 
-  # fix missing apt-get install dependencies
-  apt-get -f install -y
-fi
+# fix missing apt-get install dependencies
+apt-get -f install -y
 
 echo "Installing rpi-serial-console script"
 wget -q https://raw.githubusercontent.com/lurch/rpi-serial-console/master/rpi-serial-console -O usr/local/bin/rpi-serial-console
