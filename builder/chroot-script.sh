@@ -225,15 +225,6 @@ echo '{
 }
 ' > /etc/docker/daemon.json
 
-# install docker-engine
-DOCKER_DEB=$(mktemp)
-wget -q -O "$DOCKER_DEB" "$DOCKER_DEB_URL"
-echo "${DOCKER_DEB_CHECKSUM} ${DOCKER_DEB}" | sha256sum -c -
-dpkg -i "$DOCKER_DEB" || /bin/true
-
-# fix missing apt-get install dependencies
-apt-get -f install -y
-
 echo "Installing rpi-serial-console script"
 wget -q https://raw.githubusercontent.com/lurch/rpi-serial-console/master/rpi-serial-console -O usr/local/bin/rpi-serial-console
 chmod +x usr/local/bin/rpi-serial-console
